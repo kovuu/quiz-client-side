@@ -1,14 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App from './App'
+import reportWebVitals from './reportWebVitals'
+import {Provider} from "react-redux"
+import { Store }  from 'redux'
+import configureStore, {IAppState} from "./store/store"
+import {getAllQuizes} from "./actions/quizActions"
+
+
+interface IProps {
+    store: Store<IAppState>
+}
+
+const Root: React.FC<IProps> = props => {
+    return (
+        <Provider store={props.store}>
+            <App />
+        </Provider>
+    )
+}
+
+const store = configureStore()
+store.dispatch(getAllQuizes())
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+    <Root store={store} />,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
