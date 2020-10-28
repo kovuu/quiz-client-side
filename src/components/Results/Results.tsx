@@ -10,7 +10,7 @@ const Results: React.FC<IProps> = ({results}) => {
         <div>
             {results.map((result) => {
                 return (
-                    <div>
+                    <div key={result.test_id}>
                         <p>{result.description}</p>
                         <img src={result.imageLink} height="400"/>
                     </div>
