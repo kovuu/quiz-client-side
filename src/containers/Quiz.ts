@@ -4,7 +4,7 @@ import Quiz from "../components/Quiz/Quiz";
 import {AnyAction} from 'redux'
 import {ThunkDispatch} from 'redux-thunk'
 
-import {getQuizById, QuizActionTypes, setResults, setUserAnswer} from "../actions/quizActions";
+import {getQuizById, setResults, setUserAnswer} from "../actions/quizActions";
 import {Result} from "../reducers/quizReducer";
 
 

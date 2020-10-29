@@ -21,7 +21,8 @@ const Quiz: React.FC<IProps> = (props) => {
             await props.getQuizById(props.match.params.id)
             await setCurrentQuestionIdx(prevState => prevState = 0)
         }
-        getProps().then(r => console.log(props))
+        getProps()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
 
@@ -50,12 +51,11 @@ const Quiz: React.FC<IProps> = (props) => {
 
     const sendResults = () => {
         const data = {answers: JSON.stringify(props.userAnswers)}
-        console.log(data)
         axios.post('http://localhost:4000/results', data).then(r => props.setResults(r.data))
     }
 
     const isDisableToNext = () => {
-        if (!props.userAnswers [currentQuestionIdx!]) {
+        if (!props.userAnswers[currentQuestionIdx!]) {
             return true
         }
         return false

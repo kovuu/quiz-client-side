@@ -16,8 +16,12 @@ export interface IQuizState {
 
 export interface Result {
     test_id: number,
-    imageLink: string,
+    imagesLinks: ImageLink[],
     description: string
+}
+
+export interface ImageLink {
+    imageLink: string
 }
 
 export interface Question {

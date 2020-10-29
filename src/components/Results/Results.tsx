@@ -10,9 +10,12 @@ const Results: React.FC<IProps> = ({results}) => {
         <div>
             {results.map((result) => {
                 return (
-                    <div key={result.test_id}>
+                    <div key={result.description}>
                         <p>{result.description}</p>
-                        <img src={result.imageLink} height="400"/>
+                        {result.imagesLinks.map((item) => {
+                            return <img alt='img' key={item.imageLink} src={item.imageLink} height="400"/>
+                            })
+                        }
                     </div>
                 )
             })}

@@ -3,7 +3,6 @@ import { ThunkAction } from 'redux-thunk'
 import axios from 'axios'
 
 import {IQuizInfo, IQuizState, Question, Result} from "../reducers/quizReducer"
-import store from "../store/store";
 
 export interface IExtraDispatchArguments {
 
@@ -73,23 +72,17 @@ export const setUserAnswer = (answerId: string, questionIdx: number, userAnswers
 
     // let userAnswers = store().getState().quizState.userAnswers.slice(0)
     //
-    console.log(userAnswers)
     let newArr: string[] = []
     if (!userAnswers) {
-        console.log('!userAnswers')
         newArr = []
     } else {
-        console.log('else !useranswer')
         newArr = userAnswers.slice(0)
     }
     if (!newArr) {
-        console.log('!newArr')
         newArr = [answerId]
     } else if (questionIdx < newArr.length) {
-        console.log('questions idx >')
         newArr.splice(questionIdx, 1, answerId)
     } else {
-        console.log('else')
         newArr.push(answerId)
     }
 
