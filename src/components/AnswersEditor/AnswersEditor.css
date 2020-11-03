@@ -1,0 +1,15 @@
+.question-block {
+    border: black 1px solid;
+    width: 500px;
+    margin: 10px auto;
+}
+
+select {
+    display: inline-block;
+    height: 100px;
+}
+
+.form-block {
+    width: 500px;
+    margin: 10px auto;
+}

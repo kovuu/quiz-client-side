@@ -46,7 +46,7 @@ const TestsList: React.FC<IProps> = (props) => {
             {props.quizes.map((quiz) => {
                return ( <div key={quiz.id}>
                    {isEdit !== quiz.id && <>
-                        <a href={`editor/test/${quiz.id}`}>{quiz.name}</a>
+                        <a href={`edit/${quiz.id}`}>{quiz.name}</a>
                        <i className="material-icons" onClick={() => editHandler(quiz.id)}>edit</i>
                         </>
                    }

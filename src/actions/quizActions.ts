@@ -2,7 +2,7 @@ import { ActionCreator, Dispatch } from 'redux'
 import { ThunkAction } from 'redux-thunk'
 import axios from 'axios'
 
-import {IQuizInfo, IQuizState, Question, Result} from "../reducers/quizReducer"
+import {IQuizInfo, IQuizState, Question, Result, TestData} from "../reducers/quizReducer"
 
 export interface IExtraDispatchArguments {
 
@@ -12,7 +12,8 @@ export enum QuizActionTypes {
     GET_ALL_QUIZES = 'GET_ALL_QUIZES',
     QUIZ_BY_ID = 'QUIZ_BY_ID',
     SET_USER_ANSWER = 'SET_USER_ANSWER',
-    SET_RESULTS = 'SET_RESULTS'
+    SET_RESULTS = 'SET_RESULTS',
+    SET_TEST_DATA = 'SET_TEST_DATA'
 }
 
 export interface IQuizGetAllQuizesAction {
@@ -35,7 +36,13 @@ export interface IQuizSetResultsAction {
     results: Result[]
 }
 
-export type QuizActions = IQuizGetAllQuizesAction | IQuizQuizByIdAction | IQuizSetUserAnswerAction | IQuizSetResultsAction
+export interface IQuizSetTestDataAction {
+    type: QuizActionTypes.SET_TEST_DATA,
+    data: TestData
+}
+
+export type QuizActions = IQuizGetAllQuizesAction | IQuizQuizByIdAction | IQuizSetUserAnswerAction
+        | IQuizSetResultsAction | IQuizSetTestDataAction
 
 export const getAllQuizes: ActionCreator<
     ThunkAction<Promise<any>, IQuizState, null, IQuizGetAllQuizesAction>> = () => {
@@ -105,3 +112,18 @@ export const setResults = (results: Result[]) => {
     }
 }
 
+export const setTestData: ActionCreator<
+    ThunkAction<Promise<any>, IQuizState, null, IQuizQuizByIdAction>> = (id: number) => {
+
+    return async (dispatch: Dispatch) => {
+        try {
+            const response = await axios.get(`http://localhost:4000/test/${id}/data`)
+            dispatch({
+                type: QuizActionTypes.SET_TEST_DATA,
+                data: response.data
+            })
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}

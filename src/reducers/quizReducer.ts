@@ -11,7 +11,8 @@ export interface IQuizState {
     quizes: IQuizInfo[],
     currentQuiz: Question[],
     userAnswers: string[],
-    results: Result[]
+    results: Result[],
+    testData: TestData | null
 }
 
 export interface Result {
@@ -36,12 +37,20 @@ export interface Answer {
     text: string
 }
 
+export interface TestData {
+    questions: any[]
+    results: any[]
+}
+
 const initialQuizState: IQuizState = {
     quizes: [],
     currentQuiz: [],
     userAnswers: [],
-    results: []
+    results: [],
+    testData: null
 }
+
+
 
 
 // const initialState = {
@@ -79,6 +88,12 @@ export const quizReducer: Reducer<IQuizState, QuizActions> = (
                 return {
                     ...state,
                     results: action.results
+                }
+            }
+            case QuizActionTypes.SET_TEST_DATA: {
+                return {
+                    ...state,
+                    testData: action.data
                 }
             }
             default:

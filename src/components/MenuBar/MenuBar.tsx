@@ -37,7 +37,7 @@ const MenuBar = () => {
             <h3>Menu</h3>
 
             <p><NavLink to='/' exact onClick={hideMenuBar}>Test List</NavLink></p>
-            <p><NavLink to='/editor' onClick={hideMenuBar}>Editor</NavLink></p>
+            <p><NavLink to='/editor_list' onClick={hideMenuBar}>Editor</NavLink></p>
         </div>
     )
 
