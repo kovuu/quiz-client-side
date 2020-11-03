@@ -2,6 +2,7 @@
     border: black 1px solid;
     width: 500px;
     margin: 10px auto;
+    padding: 10px;
 }
 
 select {
@@ -12,4 +13,5 @@ select {
 .form-block {
     width: 500px;
     margin: 10px auto;
+    padding: 10px;
 }

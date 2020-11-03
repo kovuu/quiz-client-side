@@ -20,10 +20,29 @@ const mapDispatchToProps = (
     return {
         setTestData: (testId: number) => dispatch(setTestData(testId)),
         addQuestionToTest: (questionData: any, testId: number) => {
+            console.log(questionData)
             axios.post(`http://localhost:4000/test/${testId}/add`, questionData).then(r => {
                 setTestData(testId)
             })
 
+        },
+        deleteQuestionFromTest: (questionId: number, testId: number) => {
+            axios.delete(`http://localhost:4000/test/${testId}/question/${questionId}/remove`)
+                .then(r => {
+                    setTestData(testId)
+                })
+        },
+        addAnswerToQuestion: (answer: object, testId: number, questionId: number) => {
+            axios.post(`http://localhost:4000/test/${testId}/question/${questionId}/add`, answer)
+                .then(r => {
+                    setTestData(testId)
+                })
+        },
+        deleteAnswerFromQuestion: (testId: number, answerId: number, questionId: number) => {
+            axios.delete(`http://localhost:4000/test/${testId}/question/${questionId}/answer/${answerId}/remove`)
+                .then(r => {
+                    setTestData(testId)
+                })
         }
     }
 }

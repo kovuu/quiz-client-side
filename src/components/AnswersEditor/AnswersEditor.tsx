@@ -6,12 +6,17 @@ interface IProps {
     questions: Questions[],
     results: Results[],
     addQuestionToTest: (questionData: any, testId: number) => void,
+    addAnswerToQuestion: (answerData: object, testId: number, questionId: number) => void,
+    deleteAnswerFromQuestion: (testId: number, answerId: number, questionId: number) => void,
+    deleteQuestionFromTest: (questionId: number, testId: number) => void,
+    setTestData: (testId: number) => void
     match: any
 }
 
 interface Questions {
     answers: any[]
-    text: string
+    text: string,
+    id: number
 }
 
 interface Results {
@@ -21,7 +26,7 @@ interface Results {
 
 
 
-const AnswersEditor: React.FC<IProps> = ({questions, results, addQuestionToTest, match}) => {
+const AnswersEditor: React.FC<IProps> = ({questions, results, addQuestionToTest, match, addAnswerToQuestion, deleteAnswerFromQuestion, deleteQuestionFromTest, setTestData}) => {
     const [isShowForm, setIsShowForm] = useState<boolean>(false)
     const [testQuestions, setTestQuestions] = useState<any>()
 
@@ -29,6 +34,7 @@ const AnswersEditor: React.FC<IProps> = ({questions, results, addQuestionToTest,
         const arr = []
         for (let question of questions) {
             arr.push({
+                id: question.id,
                 question: question.text,
                 answers: question.answers
             })
@@ -55,145 +61,167 @@ const AnswersEditor: React.FC<IProps> = ({questions, results, addQuestionToTest,
         })
     }
 
+
+
     return (
          <div>
-            {questions.map((question) => {
-                return (
-                    <div className='question-block'>
-                    <h3>{question.text}</h3>
-                    {question.answers.map((answer) => {
-                        return (
-                            <p>{answer.text}</p>
-                        )
-                    })}
-                    </div>
-                )
-            })}
-            <button onClick={questionFormToggle}>Add question</button>
+            
 
-            {isShowForm && <div className='form-block'>
+            {testQuestions && <div className='form-block'>
                 <Formik
                     initialValues={testQuestions}
                     onSubmit={(values => {
-                        console.log(values)
                     })}>
-                    {({ values }) => (
+                    {({ values, resetForm }) => { 
+                    
+                    
+                    return (
+
+                    
                         <Form>
+                        
                             <div className="row">
                                 <div className='col'>
                                     <FieldArray name='questions'>
-                                        {({ insert, remove, push}) => (
+                                        {(arrayHelpers) => (
                                             <div>
                                                 {values.questions.length > 0 &&
                                                     values.questions.map((question: any, index: any) => {
-                                                        console.log(question)
+                                                        const questionId = question.id
                                                         return (
                                                         <div key={index}>
-                                                            <div className='row form-block'>
+                                                            <div className='row question-block'>
+                                                                <label>Question</label>
                                                                 <Field
-                                                                    name={`question.${index}.question`}
+                                                                    name={`questions.${index}.question`}
                                                                     value={question.question}
+                                                            
                                                                 />
                                                                 <ErrorMessage name={`answers.${index}.text`}
                                                                               component="div"
                                                                               className="field-error"
                                                                 />
-                                                                <h3>Answers</h3>
-
-                                                                {question.answers.length > 0 &&
-                                                                    question.answers.map((answer: any, index: any) => {
+                                                                <p>Answers</p>
+                                                                <Field name={`${arrayHelpers.name}.${index}`} >
+                                                                    {(fieldProps: any) => {
                                                                         return (
-                                                                            <Field type='text'
-                                                                                    value={answer.text}
-                                                                            />
-                                                                        )
-                                                                    })}
+                                                                    <FieldArray name={`${fieldProps.field.name}.answers`}>
+                                                                        {(arrayHelpers) => (
+                                                                             <div>
+                                                                                 {fieldProps.field.value.answers.length > 0 &&
+                                                                                    fieldProps.field.value.answers.map((answer: any, idx: any) => {
+                                                                                        return (
+                                                                                            <div key={idx}>
+                                                                                                    <Field type='text'
+                                                                                                        value={answer.text}
+                                                                                                        name={`questions.${index}.answers.${idx}.text`}
 
+                                                                                                    />
+                                                                                                     <div className='col'>
+                                                                                <Field as="select" name={`questions.${index}.answers.${idx}.results`} multiple >
+                                                                                    {results.map((result) => {
+                                                                                    return (
+                                                                                            <option value={result.id}>
+                                                                                                {result.description}
+                                                                                            </option>
+                                                                                    )
+                                                                                    })}
+                                                                                </Field>
+                                                     </div>
+
+                                                                                                    {answer.isNew && <button
+                                                                                                        type="button"
+                                                                                                        onClick={() => {
+                                                                                                            if (answer.results) {
+                                                                                                            answer = {
+                                                                                                                text: answer.text,
+                                                                                                                results: answer.results
+                                                                                                            }
+                                                                                                            addAnswerToQuestion(answer, match.params.id, questionId)
+                                                                                                        } else {
+                                                                                                            alert('Вы забыли указать привязку к результату')
+                                                                                                        }
+                                                                                                        }}
+                                                                                                    >Save</button>}
+
+                                                                                                <div className="col">
+                                                                                                     <button
+                                                                                                     type="button"
+                                                                                                     className="secondary"
+                                                                                                     onClick={() => {
+                                                                                                         
+                                                                                                        deleteAnswerFromQuestion(match.params.id, answer.id, questionId) 
+                                                                                                        }}
+                                                                                                >
+                                                                                                    Delete
+                                                                                                    </button>
+                                                                                                </div> 
+                                                                                            </div>
+                                                                                        )
+                                                                                    })}
+                                                                                    <br/>
+                                                                                    <br/>
+                                                                                    <br/>
+                                                                                    <br/>
+                                                                                    <br/>
+                                                                                    <div className='row'>
+                                                                                     <button
+                                                                                            type="button"
+                                                                                            className="secondary"
+                                                                                            onClick={() => arrayHelpers.push({question: '', answers: [{text: ''}], isNew: true})}
+                                                                                        >
+                                                                                            Add Answer
+                                                                                        </button> 
+                                                                                        </div>
+                                                                             </div>                               
+                                                                        )}
+                                                                    </FieldArray>
+                                                                    )}
+                                                                                }
+                                                                    </Field>
+                                                                    
+                                                                    <button
+                                                                            onClick={() => {
+                                                                                deleteQuestionFromTest(questionId, match.params.id)
+                                                                                arrayHelpers.remove(index)
+                                                                            }}    
+                                                                        >
+                                                                        Delete question
+                                                                    </button>
+                                                                    {question.isNew && <button
+                                                                                onClick={() => {
+                                                                                    const questionData = {
+                                                                                        question: question.question,
+                                                                                        answers: question.answers
+                                                                                    }
+                                                                                    addQuestionToTest(questionData, match.params.id)
+                                                                                    setTestData(match.params.id)
+
+                                                                                    resetForm()
+                                                                                }}>
+                                                                        Save Question
+                                                                        </button>}
+                  
                                                             </div>
                                                         </div>
+                                                       
                                                         )})}
+                                                             <button
+                                                                type="button"
+                                                                className="secondary"
+                                                                onClick={() => arrayHelpers.push({question: '', answers: [{text: ''}], isNew: true})}
+                                                            >
+                                                                Add Question
+                                                            </button> 
                                             </div>
                                         )}
                                     </FieldArray>
+                                    {/* <button type='submit'>Submit</button> */}
                                 </div>
                             </div>
                         </Form>
-                    )}
+                    )}}
                 </Formik>
-                {/*<Formik*/}
-                {/*    initialValues={initialValues}*/}
-                {/*    onSubmit={async (values) => {*/}
-                {/*         addQuestionToTest(values, match.params.id)*/}
-                {/*         questionFormToggle()*/}
-                {/*        }*/}
-                {/*    }*/}
-                {/*    >*/}
-                {/*    {({ values }) => (*/}
-                {/*        <Form>*/}
-                {/*            <div className="row">*/}
-                {/*                <div className='col'>*/}
-                {/*                 <label htmlFor='question'>Question</label>*/}
-                {/*                 <Field id='question' name='question' type="text"/>*/}
-                {/*                    <ErrorMessage name='question'*/}
-                {/*                                  component="div"*/}
-                {/*                                  className="field-error"*/}
-                {/*                    />*/}
-                {/*                </div>*/}
-                {/*            </div>*/}
-                {/*            <FieldArray name='answers'>*/}
-                {/*                {({ insert, remove, push }) => (*/}
-                {/*                    <div>*/}
-                {/*                        {values.answers.length > 0 &&*/}
-                {/*                             values.answers.map((answer, index) => (*/}
-                {/*                                 <div className='row' key={index}>*/}
-                {/*                                     <div className='col'>*/}
-                {/*                                         <label htmlFor={`answers.${index}.text`}>Answer</label>*/}
-                {/*                                         <Field*/}
-                {/*                                            name={`answers.${index}.text`}*/}
-                {/*                                            type="text"*/}
-                {/*                                         />*/}
-                {/*                                         <ErrorMessage name={`answers.${index}.text`}*/}
-                {/*                                                       component="div"*/}
-                {/*                                                       className="field-error"*/}
-                {/*                                                       />*/}
-
-                {/*                                     </div>*/}
-                {/*                                     <div className='col'>*/}
-                {/*                                         <Field as="select" name={`answers.${index}.results`} multiple>*/}
-                {/*                                             {results.map((result) => {*/}
-                {/*                                                 return (*/}
-                {/*                                                     <option value={result.id}>*/}
-                {/*                                                         {result.description}*/}
-                {/*                                                     </option>*/}
-                {/*                                                 )*/}
-                {/*                                             })}*/}
-                {/*                                         </Field>*/}
-                {/*                                     </div>*/}
-                {/*                                     <div className="col">*/}
-                {/*                                         <button*/}
-                {/*                                             type="button"*/}
-                {/*                                             className="secondary"*/}
-                {/*                                             onClick={() => remove(index)}*/}
-                {/*                                         >*/}
-                {/*                                             X*/}
-                {/*                                         </button>*/}
-                {/*                                     </div>*/}
-                {/*                                 </div>*/}
-                {/*                             ))}*/}
-                {/*                        <button*/}
-                {/*                            type="button"*/}
-                {/*                            className="secondary"*/}
-                {/*                            onClick={() => push({text: ''})}*/}
-                {/*                        >*/}
-                {/*                            Add Answer*/}
-                {/*                        </button>*/}
-                {/*                    </div>*/}
-                {/*                )}*/}
-                {/*            </FieldArray>*/}
-                {/*            <button type="submit">Add</button>*/}
-                {/*        </Form>*/}
-                {/*    )}*/}
-                {/*</Formik>*/}
             </div>}
         </div>
     )

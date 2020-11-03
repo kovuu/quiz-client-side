@@ -18,6 +18,7 @@ const App: React.FC = () => {
                 <Route path='/editor_list' component={TestsList} />
                 <Route path='/test/:id' component={Quiz} />
                 <Route path='/' component={QuizList} exact/>
+            
             </Switch>
         </BrowserRouter>
     </div>
