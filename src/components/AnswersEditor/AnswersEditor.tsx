@@ -3,7 +3,7 @@ import './AnswersEditor.css'
 import {Formik, Form, Field, FieldArray, ErrorMessage} from 'formik'
 
 interface IProps {
-    questions: Questions[],
+    questions: Questions[] | null,
     results: Results[],
     addQuestionToTest: (questionData: any, testId: number) => void,
     addAnswerToQuestion: (answerData: object, testId: number, questionId: number) => void,
@@ -27,39 +27,28 @@ interface Results {
 
 
 const AnswersEditor: React.FC<IProps> = ({questions, results, addQuestionToTest, match, addAnswerToQuestion, deleteAnswerFromQuestion, deleteQuestionFromTest, setTestData}) => {
-    const [isShowForm, setIsShowForm] = useState<boolean>(false)
     const [testQuestions, setTestQuestions] = useState<any>()
 
     useEffect(() => {
         const arr = []
-        for (let question of questions) {
-            arr.push({
-                id: question.id,
-                question: question.text,
-                answers: question.answers
-            })
-        }
-        setTestQuestions({questions: arr})
-    }, [])
-
-
-    const [initialValues, setInitialValues] = useState({
-        question: '',
-        answers: [
-            {
-                text: '',
-                results: '3'
+        if (questions !== null) {
+            for (let question of questions) {
+                arr.push({
+                    id: question.id,
+                    question: question.text,
+                    answers: question.answers
+                })
             }
-        ]
-    })
+            setTestQuestions({questions: arr})
+        } else {
+            setTestQuestions({questions: null})
+        }
+    }, [questions])
 
 
 
-    const questionFormToggle = () => {
-        setIsShowForm(prevState => {
-            return !prevState
-        })
-    }
+
+
 
 
 
@@ -195,9 +184,10 @@ const AnswersEditor: React.FC<IProps> = ({questions, results, addQuestionToTest,
                                                                                         answers: question.answers
                                                                                     }
                                                                                     addQuestionToTest(questionData, match.params.id)
-                                                                                    setTestData(match.params.id)
 
-                                                                                    resetForm()
+
+
+                                                                                    // resetForm()
                                                                                 }}>
                                                                         Save Question
                                                                         </button>}

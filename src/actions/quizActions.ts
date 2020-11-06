@@ -48,7 +48,7 @@ export const getAllQuizes: ActionCreator<
     ThunkAction<Promise<any>, IQuizState, null, IQuizGetAllQuizesAction>> = () => {
     return async (dispatch: Dispatch) => {
         try {
-            const response = await axios.get('http://localhost:4000/tests')
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/tests`)
             dispatch({
                 quizes: response.data,
                 type: QuizActionTypes.GET_ALL_QUIZES
@@ -64,7 +64,7 @@ export const getQuizById: ActionCreator<
 
     return async (dispatch: Dispatch) => {
         try {
-            const response = await axios.get(`http://localhost:4000/test/${testId}`)
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/test/${testId}`)
             dispatch({
                 quiz: response.data,
                 type: QuizActionTypes.QUIZ_BY_ID
@@ -117,7 +117,7 @@ export const setTestData: ActionCreator<
 
     return async (dispatch: Dispatch) => {
         try {
-            const response = await axios.get(`http://localhost:4000/test/${id}/data`)
+            const response = await axios.get(`${process.env.REACT_APP_SERVER_ADDRESS}/test/${id}/data`)
             dispatch({
                 type: QuizActionTypes.SET_TEST_DATA,
                 data: response.data

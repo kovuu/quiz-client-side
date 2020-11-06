@@ -27,7 +27,7 @@ const TestsList: React.FC<IProps> = (props) => {
             id: id,
             name: ref.current!.value
         }
-        await axios.post('http://localhost:4000/edit_test_name', data)
+        await axios.post('${process.env.REACT_APP_SERVER_ADDRESS}/edit_test_name', data)
             .then(r => {
                 stopEditHandler()
                 props.getAllQuizes()

@@ -51,7 +51,7 @@ const Quiz: React.FC<IProps> = (props) => {
 
     const sendResults = () => {
         const data = {answers: JSON.stringify(props.userAnswers)}
-        axios.post('http://localhost:4000/results', data).then(r => props.setResults(r.data))
+        axios.post(`${process.env.REACT_APP_SERVER_ADDRESS}/results`, data).then(r => props.setResults(r.data))
     }
 
     const isDisableToNext = () => {

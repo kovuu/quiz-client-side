@@ -2,7 +2,7 @@ import React, {useEffect} from 'react'
 import './TestEditor.css'
 import { Route, Link} from 'react-router-dom'
 import AnswersEditor from '../../containers/AnswersEditor'
-import ResultsEditor from '../ResultsEditor/ResultsEditor'
+import ResultsEditor from '../../containers/ResultsEditor'
 
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
 const TestEditor: React.FC<IProps> = ({match, setTestData}) => {
     useEffect(() => {
         setTestData(match.params.id)
-    }, [])
+    }, [match.params.id, setTestData])
 
 
     return (
