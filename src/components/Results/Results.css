@@ -1,0 +1,24 @@
+.results-block {
+    margin: 0 auto;
+    text-align: center;
+}
+
+.images-block {
+    display: flex;
+    justify-content: space-evenly;
+    width: 1000px;
+    margin: 20px auto;
+    flex-wrap: wrap;
+}
+
+.images-block img {
+    width: 400px;
+    margin-bottom: 10px;
+}
+
+.buttons-block {
+    display: flex;
+    width: 400px;
+    justify-content: space-evenly;
+    margin: 0 auto;
+}
