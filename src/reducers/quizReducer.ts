@@ -1,4 +1,4 @@
-import {Reducer} from 'redux'
+ import {Reducer} from 'redux'
 // import {createTracing} from "trace_events";
 import {QuizActions, QuizActionTypes} from "../actions/quizActions";
 
@@ -12,7 +12,6 @@ export interface IQuizState {
     currentQuiz: Question[],
     userAnswers: string[],
     results: Result[],
-    testData: TestData | null
 }
 
 export interface Result {
@@ -37,17 +36,13 @@ export interface Answer {
     text: string
 }
 
-export interface TestData {
-    questions: any[]
-    results: any[]
-}
+
 
 const initialQuizState: IQuizState = {
     quizes: [],
     currentQuiz: [],
     userAnswers: [],
     results: [],
-    testData: null
 }
 
 
@@ -88,12 +83,6 @@ export const quizReducer: Reducer<IQuizState, QuizActions> = (
                 return {
                     ...state,
                     results: action.results
-                }
-            }
-            case QuizActionTypes.SET_TEST_DATA: {
-                return {
-                    ...state,
-                    testData: action.data
                 }
             }
             default:
