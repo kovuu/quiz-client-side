@@ -3,7 +3,7 @@
 A client-side of test React/Nodejs project used as questionnaire to collect user replies and provide the final result with pictures.
 The project also has an admin section to make CRUD operations for any question/reply
 
-![] (demo.gif)
+! [AltText] (demo.gif)
 
 ## Getting Started
 
